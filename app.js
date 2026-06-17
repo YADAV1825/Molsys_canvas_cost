@@ -122,9 +122,13 @@ const els = {
     pdfSelect: document.getElementById('pdf-select'),
     contextSelect: document.getElementById('context-select'),
     btnReset: document.getElementById('btn-reset'),
-    // KPIs
+    // KPIs - first card (swappable)
+    kpiFirstCard: document.getElementById('kpi-cheapest'),
+    kpiFirstIcon: document.querySelector('#kpi-cheapest .kpi-icon'),
+    kpiFirstLabel: document.querySelector('#kpi-cheapest .kpi-label'),
     kpiCheapestVal: document.getElementById('kpi-cheapest-value'),
     kpiCheapestSub: document.getElementById('kpi-cheapest-sub'),
+    // KPIs - other cards
     kpiMonthlyVal: document.getElementById('kpi-monthly-value'),
     kpiMonthlySub: document.getElementById('kpi-monthly-sub'),
     kpiAnnualVal: document.getElementById('kpi-annual-value'),
@@ -281,6 +285,17 @@ function updateAll() {
     updateHeatmap();
 }
 
+// ─── Context Window Helper ──────────────────────────────────
+const CONTEXT_SIZES = {
+    'Aggressive (64k)': { input: '64K', output: '64K', total: '128K' },
+    'Above Avg (32k)':  { input: '32K', output: '32K', total: '64K' },
+    'Average (16k)':    { input: '16K', output: '16K', total: '32K' },
+    'Conservative (8k)':{ input: '8K',  output: '8K',  total: '16K' },
+};
+
+const ICON_CHEAPEST = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+const ICON_CONTEXT = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+
 // ─── KPIs ───────────────────────────────────────────────────
 function updateKPIs(data) {
     if (data.length === 0) {
@@ -305,11 +320,48 @@ function updateKPIs(data) {
     const minPerUser = Math.min(...perUserCosts);
     const maxPerUser = Math.max(...perUserCosts);
 
-    // Cheapest
-    const cheapestIdx = monthlyCosts.indexOf(minMonthly);
-    const cheapest = data[cheapestIdx];
-    els.kpiCheapestVal.textContent = fmtCurrency(minMonthly) + '/mo';
-    els.kpiCheapestSub.textContent = `${cheapest.model} · ${cheapest.pdfs} PDFs · ${cheapest.context}`;
+    // ── First KPI Card: Cheapest (all models) vs Context Window (specific model) ──
+    const isSingleModel = state.model !== 'all';
+
+    if (isSingleModel) {
+        // Show Context Window breakdown
+        els.kpiFirstLabel.textContent = 'Context Window';
+        els.kpiFirstIcon.innerHTML = ICON_CONTEXT;
+        els.kpiFirstIcon.className = 'kpi-icon kpi-icon-cyan';
+        els.kpiFirstCard.classList.remove('kpi-card-primary');
+        els.kpiFirstCard.classList.add('kpi-card-context');
+
+        // Determine the context tier info
+        const contextTier = state.context !== 'all' ? state.context : null;
+        if (contextTier && CONTEXT_SIZES[contextTier]) {
+            const cs = CONTEXT_SIZES[contextTier];
+            els.kpiCheapestVal.textContent = `${cs.total} tokens`;
+            els.kpiCheapestSub.textContent = `${cs.input} input + ${cs.output} output per PDF`;
+        } else {
+            // Multiple context tiers selected — show range
+            const contexts = [...new Set(data.map(d => d.context))];
+            const sizes = contexts.map(c => CONTEXT_SIZES[c]).filter(Boolean);
+            if (sizes.length > 0) {
+                els.kpiCheapestVal.textContent = `${sizes[sizes.length - 1].total} – ${sizes[0].total}`;
+                els.kpiCheapestSub.textContent = `${contexts.length} context tiers · input + output per PDF`;
+            } else {
+                els.kpiCheapestVal.textContent = '—';
+                els.kpiCheapestSub.textContent = 'Select a context tier';
+            }
+        }
+    } else {
+        // Show Cheapest Option
+        els.kpiFirstLabel.textContent = 'Cheapest Option';
+        els.kpiFirstIcon.innerHTML = ICON_CHEAPEST;
+        els.kpiFirstIcon.className = 'kpi-icon';
+        els.kpiFirstCard.classList.add('kpi-card-primary');
+        els.kpiFirstCard.classList.remove('kpi-card-context');
+
+        const cheapestIdx = monthlyCosts.indexOf(minMonthly);
+        const cheapest = data[cheapestIdx];
+        els.kpiCheapestVal.textContent = fmtCurrency(minMonthly) + '/mo';
+        els.kpiCheapestSub.textContent = `${cheapest.model} · ${cheapest.pdfs} PDFs · ${cheapest.context}`;
+    }
 
     // Monthly range
     if (minMonthly === maxMonthly) {
