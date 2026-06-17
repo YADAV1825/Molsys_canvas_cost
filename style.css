@@ -488,6 +488,21 @@ body {
     opacity: 1;
 }
 
+.kpi-card-context {
+    border-color: rgba(6, 182, 212, 0.25);
+    background: rgba(6, 182, 212, 0.06);
+}
+
+.kpi-card-context::before {
+    background: linear-gradient(135deg, #06b6d4, #22d3ee);
+    opacity: 1;
+}
+
+.kpi-icon-cyan {
+    background: rgba(6, 182, 212, 0.12);
+    color: var(--accent-cyan);
+}
+
 .kpi-icon {
     width: 42px;
     height: 42px;
