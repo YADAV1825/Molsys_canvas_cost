@@ -86,24 +86,24 @@
                         Total Users
                     </label>
                     <div class="slider-container">
-                        <input type="range" id="user-count-slider" min="100" max="50000" value="5000" step="100"
-                            class="slider">
+                        <div style="flex: 1; position: relative;">
+                            <input type="range" id="user-count-slider" min="100" max="10000000" value="100" step="100"
+                                class="slider" style="width: 100%;">
+                            <div class="slider-marks" style="position: absolute; left: 0; right: 0; top: 100%;">
+                                <span>100</span>
+                                <span>10M</span>
+                            </div>
+                        </div>
                         <div class="slider-value-group">
-                            <input type="number" id="user-count-input" value="5000" min="100" max="50000" step="100"
+                            <input type="number" id="user-count-input" value="100" min="100" max="10000000" step="100"
                                 class="slider-input">
                             <span class="slider-unit">users</span>
                         </div>
                     </div>
-                    <div class="slider-marks">
-                        <span>100</span>
-                        <span>10K</span>
-                        <span>25K</span>
-                        <span>50K</span>
-                    </div>
                 </div>
 
                 <!-- Model Selection -->
-                <div class="control-group">
+                <div class="control-group" style="display: none;">
                     <label class="control-label">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5" />
@@ -129,7 +129,7 @@
                                 stroke-width="1.5" />
                             <path d="M9 2v5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         </svg>
-                        PDFs / User / Month
+                        PDFs / User / Month <span style="font-size: 0.75em; opacity: 0.75; font-weight: 400; margin-left: 4px;">(Assumes 50 pages/PDF)</span>
                     </label>
                     <div class="select-wrapper">
                         <select id="pdf-select" class="select-input">
@@ -138,6 +138,7 @@
                             <option value="30">30 PDFs</option>
                             <option value="15" selected>15 PDFs</option>
                             <option value="10">10 PDFs</option>
+                            <option value="5">5 PDFs</option>
                         </select>
                         <svg class="select-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -157,10 +158,10 @@
                     <div class="select-wrapper">
                         <select id="context-select" class="select-input">
                             <option value="all">All Tiers (Compare)</option>
-                            <option value="Aggressive (64k)">Aggressive (64k)</option>
-                            <option value="Above Avg (32k)" selected>Above Avg (32k)</option>
-                            <option value="Average (16k)">Average (16k)</option>
-                            <option value="Conservative (8k)">Conservative (8k)</option>
+                            <option value="Aggressive (64k+64k)">Aggressive (64k+64k)</option>
+                            <option value="Above Avg (32k+32k)" selected>Above Avg (32k+32k)</option>
+                            <option value="Average (16k+16k)">Average (16k+16k)</option>
+                            <option value="Conservative (8k+8k)">Conservative (8k+8k)</option>
                         </select>
                         <svg class="select-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -261,7 +262,7 @@
                 <div class="chart-card" id="chart-scaling-card">
                     <div class="chart-header">
                         <h3 class="chart-title">Cost Scaling by User Count</h3>
-                        <p class="chart-desc">How total monthly cost scales from 100 to 50K users</p>
+                        <p class="chart-desc">How total monthly cost scales from 100 to 10M users</p>
                     </div>
                     <div class="chart-body">
                         <canvas id="chart-scaling"></canvas>
@@ -281,7 +282,11 @@
                         </svg>
                         Detailed Simulation Results
                     </h3>
-                    <div class="table-actions">
+                    <div class="table-actions" style="display: flex; align-items: center;">
+                        <button id="btn-download-csv" class="btn-reset" style="margin-right: 16px; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); padding: 6px 12px; border-radius: 6px; color: #f0f1f5; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; transition: all 0.2s;">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 11v3H2v-3M8 3v8M5 8l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Export CSV
+                        </button>
                         <span class="table-count" id="table-count">0 scenarios</span>
                     </div>
                 </div>

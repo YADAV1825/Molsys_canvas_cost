@@ -7,112 +7,131 @@
 // We store the costPerUser (at 5000 users) so we can scale linearly to any user count.
 
 const MODEL_COLORS = {
-    'Nemotron Nano 3 30B': { bg: '#6366f1', light: 'rgba(99,102,241,0.18)' },
-    'Nemotron 3 Super 120B': { bg: '#a855f7', light: 'rgba(168,85,247,0.18)' },
-    'Gemma 3 4B IT': { bg: '#10b981', light: 'rgba(16,185,129,0.18)' },
-    'Gemma 3 12B IT': { bg: '#06b6d4', light: 'rgba(6,182,212,0.18)' },
-    'Gemma 3 27B IT': { bg: '#f59e0b', light: 'rgba(245,158,11,0.18)' },
-    'GPT-oss-20b': { bg: '#f43f5e', light: 'rgba(244,63,94,0.18)' },
-    'Llama 4 Scout 17B': { bg: '#3b82f6', light: 'rgba(59,130,246,0.18)' },
+    'Model A 30B': { bg: '#6366f1', light: 'rgba(99,102,241,0.18)' },
+    'Model B 120B': { bg: '#a855f7', light: 'rgba(168,85,247,0.18)' },
+    'Model C 12B': { bg: '#06b6d4', light: 'rgba(6,182,212,0.18)' },
+    'Model D 20B': { bg: '#f43f5e', light: 'rgba(244,63,94,0.18)' },
+    'Model E 110B MoE': { bg: '#3b82f6', light: 'rgba(59,130,246,0.18)' },
 };
 
 const MODELS_DATA = [
     // Nemotron Nano 3 30B
-    { model: 'Nemotron Nano 3 30B', pdfs: 50, context: 'Aggressive (64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.02, costPerUser: 0.96 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 50, context: 'Above Avg (32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.01, costPerUser: 0.48 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 50, context: 'Average (16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.005, costPerUser: 0.24 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 50, context: 'Conservative (8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.0024, costPerUser: 0.12 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 30, context: 'Aggressive (64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.02, costPerUser: 0.58 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 30, context: 'Above Avg (32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.01, costPerUser: 0.29 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 30, context: 'Average (16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.005, costPerUser: 0.14 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 30, context: 'Conservative (8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.0024, costPerUser: 0.07 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 15, context: 'Aggressive (64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.02, costPerUser: 0.29 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 15, context: 'Above Avg (32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.14 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 15, context: 'Average (16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.005, costPerUser: 0.07 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 15, context: 'Conservative (8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.0024, costPerUser: 0.04 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 10, context: 'Aggressive (64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.02, costPerUser: 0.19 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 10, context: 'Above Avg (32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.01, costPerUser: 0.10 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 10, context: 'Average (16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.005, costPerUser: 0.05 },
-    { model: 'Nemotron Nano 3 30B', pdfs: 10, context: 'Conservative (8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.0024, costPerUser: 0.02 },
+    { model: 'Model A 30B', pdfs: 50, context: 'Aggressive (64k+64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.02, costPerUser: 0.96 },
+    { model: 'Model A 30B', pdfs: 50, context: 'Above Avg (32k+32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.01, costPerUser: 0.48 },
+    { model: 'Model A 30B', pdfs: 50, context: 'Average (16k+16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.005, costPerUser: 0.24 },
+    { model: 'Model A 30B', pdfs: 50, context: 'Conservative (8k+8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.0024, costPerUser: 0.12 },
+    { model: 'Model A 30B', pdfs: 30, context: 'Aggressive (64k+64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.02, costPerUser: 0.58 },
+    { model: 'Model A 30B', pdfs: 30, context: 'Above Avg (32k+32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.01, costPerUser: 0.29 },
+    { model: 'Model A 30B', pdfs: 30, context: 'Average (16k+16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.005, costPerUser: 0.14 },
+    { model: 'Model A 30B', pdfs: 30, context: 'Conservative (8k+8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.0024, costPerUser: 0.07 },
+    { model: 'Model A 30B', pdfs: 15, context: 'Aggressive (64k+64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.02, costPerUser: 0.29 },
+    { model: 'Model A 30B', pdfs: 15, context: 'Above Avg (32k+32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.14 },
+    { model: 'Model A 30B', pdfs: 15, context: 'Average (16k+16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.005, costPerUser: 0.07 },
+    { model: 'Model A 30B', pdfs: 15, context: 'Conservative (8k+8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.0024, costPerUser: 0.04 },
+    { model: 'Model A 30B', pdfs: 10, context: 'Aggressive (64k+64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.02, costPerUser: 0.19 },
+    { model: 'Model A 30B', pdfs: 10, context: 'Above Avg (32k+32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.01, costPerUser: 0.10 },
+    { model: 'Model A 30B', pdfs: 10, context: 'Average (16k+16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.005, costPerUser: 0.05 },
+    { model: 'Model A 30B', pdfs: 10, context: 'Conservative (8k+8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.0024, costPerUser: 0.02 },
+    { model: 'Model A 30B', pdfs: 5, context: 'Aggressive (64k+64k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.02, costPerUser: 0.10 },
+    { model: 'Model A 30B', pdfs: 5, context: 'Above Avg (32k+32k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.05 },
+    { model: 'Model A 30B', pdfs: 5, context: 'Average (16k+16k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.005, costPerUser: 0.03 },
+    { model: 'Model A 30B', pdfs: 5, context: 'Conservative (8k+8k)', inputTokens: 40000, outputTokens: 40000, totalTokens: 80000, costPerPdf: 0.0024, costPerUser: 0.01 },
 
     // Nemotron 3 Super 120B
-    { model: 'Nemotron 3 Super 120B', pdfs: 50, context: 'Aggressive (64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.05, costPerUser: 2.56 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 50, context: 'Above Avg (32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.03, costPerUser: 1.28 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 50, context: 'Average (16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.64 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 50, context: 'Conservative (8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.01, costPerUser: 0.32 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 30, context: 'Aggressive (64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.05, costPerUser: 1.54 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 30, context: 'Above Avg (32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.03, costPerUser: 0.77 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 30, context: 'Average (16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.38 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 30, context: 'Conservative (8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.19 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 15, context: 'Aggressive (64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.05, costPerUser: 0.77 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 15, context: 'Above Avg (32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.03, costPerUser: 0.38 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 15, context: 'Average (16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.19 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 15, context: 'Conservative (8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.01, costPerUser: 0.10 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 10, context: 'Aggressive (64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.05, costPerUser: 0.51 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 10, context: 'Above Avg (32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.03, costPerUser: 0.26 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 10, context: 'Average (16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.13 },
-    { model: 'Nemotron 3 Super 120B', pdfs: 10, context: 'Conservative (8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.06 },
+    { model: 'Model B 120B', pdfs: 50, context: 'Aggressive (64k+64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.05, costPerUser: 2.56 },
+    { model: 'Model B 120B', pdfs: 50, context: 'Above Avg (32k+32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.03, costPerUser: 1.28 },
+    { model: 'Model B 120B', pdfs: 50, context: 'Average (16k+16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.64 },
+    { model: 'Model B 120B', pdfs: 50, context: 'Conservative (8k+8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.01, costPerUser: 0.32 },
+    { model: 'Model B 120B', pdfs: 30, context: 'Aggressive (64k+64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.05, costPerUser: 1.54 },
+    { model: 'Model B 120B', pdfs: 30, context: 'Above Avg (32k+32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.03, costPerUser: 0.77 },
+    { model: 'Model B 120B', pdfs: 30, context: 'Average (16k+16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.38 },
+    { model: 'Model B 120B', pdfs: 30, context: 'Conservative (8k+8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.19 },
+    { model: 'Model B 120B', pdfs: 15, context: 'Aggressive (64k+64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.05, costPerUser: 0.77 },
+    { model: 'Model B 120B', pdfs: 15, context: 'Above Avg (32k+32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.03, costPerUser: 0.38 },
+    { model: 'Model B 120B', pdfs: 15, context: 'Average (16k+16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.19 },
+    { model: 'Model B 120B', pdfs: 15, context: 'Conservative (8k+8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.01, costPerUser: 0.10 },
+    { model: 'Model B 120B', pdfs: 10, context: 'Aggressive (64k+64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.05, costPerUser: 0.51 },
+    { model: 'Model B 120B', pdfs: 10, context: 'Above Avg (32k+32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.03, costPerUser: 0.26 },
+    { model: 'Model B 120B', pdfs: 10, context: 'Average (16k+16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.13 },
+    { model: 'Model B 120B', pdfs: 10, context: 'Conservative (8k+8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.06 },
+    { model: 'Model B 120B', pdfs: 5, context: 'Aggressive (64k+64k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.05, costPerUser: 0.26 },
+    { model: 'Model B 120B', pdfs: 5, context: 'Above Avg (32k+32k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.03, costPerUser: 0.13 },
+    { model: 'Model B 120B', pdfs: 5, context: 'Average (16k+16k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.07 },
+    { model: 'Model B 120B', pdfs: 5, context: 'Conservative (8k+8k)', inputTokens: 40000, outputTokens: 40000, totalTokens: 80000, costPerPdf: 0.01, costPerUser: 0.03 },
 
 
     // Gemma 3 12B IT
-    { model: 'Gemma 3 12B IT', pdfs: 50, context: 'Aggressive (64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.02, costPerUser: 1.22 },
-    { model: 'Gemma 3 12B IT', pdfs: 50, context: 'Above Avg (32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.01, costPerUser: 0.61 },
-    { model: 'Gemma 3 12B IT', pdfs: 50, context: 'Average (16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.30 },
-    { model: 'Gemma 3 12B IT', pdfs: 50, context: 'Conservative (8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.003, costPerUser: 0.15 },
-    { model: 'Gemma 3 12B IT', pdfs: 30, context: 'Aggressive (64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.02, costPerUser: 0.73 },
-    { model: 'Gemma 3 12B IT', pdfs: 30, context: 'Above Avg (32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.01, costPerUser: 0.37 },
-    { model: 'Gemma 3 12B IT', pdfs: 30, context: 'Average (16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
-    { model: 'Gemma 3 12B IT', pdfs: 30, context: 'Conservative (8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.003, costPerUser: 0.09 },
-    { model: 'Gemma 3 12B IT', pdfs: 15, context: 'Aggressive (64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.02, costPerUser: 0.37 },
-    { model: 'Gemma 3 12B IT', pdfs: 15, context: 'Above Avg (32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
-    { model: 'Gemma 3 12B IT', pdfs: 15, context: 'Average (16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.09 },
-    { model: 'Gemma 3 12B IT', pdfs: 15, context: 'Conservative (8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.003, costPerUser: 0.05 },
-    { model: 'Gemma 3 12B IT', pdfs: 10, context: 'Aggressive (64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.02, costPerUser: 0.24 },
-    { model: 'Gemma 3 12B IT', pdfs: 10, context: 'Above Avg (32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.01, costPerUser: 0.12 },
-    { model: 'Gemma 3 12B IT', pdfs: 10, context: 'Average (16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.06 },
-    { model: 'Gemma 3 12B IT', pdfs: 10, context: 'Conservative (8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.003, costPerUser: 0.03 },
+    { model: 'Model C 12B', pdfs: 50, context: 'Aggressive (64k+64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.02, costPerUser: 1.22 },
+    { model: 'Model C 12B', pdfs: 50, context: 'Above Avg (32k+32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.01, costPerUser: 0.61 },
+    { model: 'Model C 12B', pdfs: 50, context: 'Average (16k+16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.30 },
+    { model: 'Model C 12B', pdfs: 50, context: 'Conservative (8k+8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.003, costPerUser: 0.15 },
+    { model: 'Model C 12B', pdfs: 30, context: 'Aggressive (64k+64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.02, costPerUser: 0.73 },
+    { model: 'Model C 12B', pdfs: 30, context: 'Above Avg (32k+32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.01, costPerUser: 0.37 },
+    { model: 'Model C 12B', pdfs: 30, context: 'Average (16k+16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
+    { model: 'Model C 12B', pdfs: 30, context: 'Conservative (8k+8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.003, costPerUser: 0.09 },
+    { model: 'Model C 12B', pdfs: 15, context: 'Aggressive (64k+64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.02, costPerUser: 0.37 },
+    { model: 'Model C 12B', pdfs: 15, context: 'Above Avg (32k+32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
+    { model: 'Model C 12B', pdfs: 15, context: 'Average (16k+16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.09 },
+    { model: 'Model C 12B', pdfs: 15, context: 'Conservative (8k+8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.003, costPerUser: 0.05 },
+    { model: 'Model C 12B', pdfs: 10, context: 'Aggressive (64k+64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.02, costPerUser: 0.24 },
+    { model: 'Model C 12B', pdfs: 10, context: 'Above Avg (32k+32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.01, costPerUser: 0.12 },
+    { model: 'Model C 12B', pdfs: 10, context: 'Average (16k+16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.06 },
+    { model: 'Model C 12B', pdfs: 10, context: 'Conservative (8k+8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.003, costPerUser: 0.03 },
+    { model: 'Model C 12B', pdfs: 5, context: 'Aggressive (64k+64k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.02, costPerUser: 0.12 },
+    { model: 'Model C 12B', pdfs: 5, context: 'Above Avg (32k+32k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.06 },
+    { model: 'Model C 12B', pdfs: 5, context: 'Average (16k+16k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.03 },
+    { model: 'Model C 12B', pdfs: 5, context: 'Conservative (8k+8k)', inputTokens: 40000, outputTokens: 40000, totalTokens: 80000, costPerPdf: 0.003, costPerUser: 0.01 },
 
 
     // GPT-oss-20b
-    { model: 'GPT-oss-20b', pdfs: 50, context: 'Aggressive (64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.02, costPerUser: 1.18 },
-    { model: 'GPT-oss-20b', pdfs: 50, context: 'Above Avg (32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.01, costPerUser: 0.59 },
-    { model: 'GPT-oss-20b', pdfs: 50, context: 'Average (16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.30 },
-    { model: 'GPT-oss-20b', pdfs: 50, context: 'Conservative (8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.003, costPerUser: 0.15 },
-    { model: 'GPT-oss-20b', pdfs: 30, context: 'Aggressive (64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.02, costPerUser: 0.71 },
-    { model: 'GPT-oss-20b', pdfs: 30, context: 'Above Avg (32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.01, costPerUser: 0.36 },
-    { model: 'GPT-oss-20b', pdfs: 30, context: 'Average (16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
-    { model: 'GPT-oss-20b', pdfs: 30, context: 'Conservative (8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.003, costPerUser: 0.09 },
-    { model: 'GPT-oss-20b', pdfs: 15, context: 'Aggressive (64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.02, costPerUser: 0.36 },
-    { model: 'GPT-oss-20b', pdfs: 15, context: 'Above Avg (32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
-    { model: 'GPT-oss-20b', pdfs: 15, context: 'Average (16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.09 },
-    { model: 'GPT-oss-20b', pdfs: 15, context: 'Conservative (8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.003, costPerUser: 0.04 },
-    { model: 'GPT-oss-20b', pdfs: 10, context: 'Aggressive (64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.02, costPerUser: 0.24 },
-    { model: 'GPT-oss-20b', pdfs: 10, context: 'Above Avg (32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.01, costPerUser: 0.12 },
-    { model: 'GPT-oss-20b', pdfs: 10, context: 'Average (16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.06 },
-    { model: 'GPT-oss-20b', pdfs: 10, context: 'Conservative (8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.003, costPerUser: 0.03 },
+    { model: 'Model D 20B', pdfs: 50, context: 'Aggressive (64k+64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.02, costPerUser: 1.18 },
+    { model: 'Model D 20B', pdfs: 50, context: 'Above Avg (32k+32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.01, costPerUser: 0.59 },
+    { model: 'Model D 20B', pdfs: 50, context: 'Average (16k+16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.30 },
+    { model: 'Model D 20B', pdfs: 50, context: 'Conservative (8k+8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.003, costPerUser: 0.15 },
+    { model: 'Model D 20B', pdfs: 30, context: 'Aggressive (64k+64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.02, costPerUser: 0.71 },
+    { model: 'Model D 20B', pdfs: 30, context: 'Above Avg (32k+32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.01, costPerUser: 0.36 },
+    { model: 'Model D 20B', pdfs: 30, context: 'Average (16k+16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
+    { model: 'Model D 20B', pdfs: 30, context: 'Conservative (8k+8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.003, costPerUser: 0.09 },
+    { model: 'Model D 20B', pdfs: 15, context: 'Aggressive (64k+64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.02, costPerUser: 0.36 },
+    { model: 'Model D 20B', pdfs: 15, context: 'Above Avg (32k+32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.18 },
+    { model: 'Model D 20B', pdfs: 15, context: 'Average (16k+16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.09 },
+    { model: 'Model D 20B', pdfs: 15, context: 'Conservative (8k+8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.003, costPerUser: 0.04 },
+    { model: 'Model D 20B', pdfs: 10, context: 'Aggressive (64k+64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.02, costPerUser: 0.24 },
+    { model: 'Model D 20B', pdfs: 10, context: 'Above Avg (32k+32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.01, costPerUser: 0.12 },
+    { model: 'Model D 20B', pdfs: 10, context: 'Average (16k+16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.06 },
+    { model: 'Model D 20B', pdfs: 10, context: 'Conservative (8k+8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.003, costPerUser: 0.03 },
+    { model: 'Model D 20B', pdfs: 5, context: 'Aggressive (64k+64k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.02, costPerUser: 0.12 },
+    { model: 'Model D 20B', pdfs: 5, context: 'Above Avg (32k+32k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.06 },
+    { model: 'Model D 20B', pdfs: 5, context: 'Average (16k+16k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.03 },
+    { model: 'Model D 20B', pdfs: 5, context: 'Conservative (8k+8k)', inputTokens: 40000, outputTokens: 40000, totalTokens: 80000, costPerPdf: 0.003, costPerUser: 0.01 },
 
-    // Llama 4 Scout 17B
-    { model: 'Llama 4 Scout 17B', pdfs: 50, context: 'Aggressive (64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.05, costPerUser: 2.66 },
-    { model: 'Llama 4 Scout 17B', pdfs: 50, context: 'Above Avg (32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.03, costPerUser: 1.33 },
-    { model: 'Llama 4 Scout 17B', pdfs: 50, context: 'Average (16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.66 },
-    { model: 'Llama 4 Scout 17B', pdfs: 50, context: 'Conservative (8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.01, costPerUser: 0.33 },
-    { model: 'Llama 4 Scout 17B', pdfs: 30, context: 'Aggressive (64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.05, costPerUser: 1.59 },
-    { model: 'Llama 4 Scout 17B', pdfs: 30, context: 'Above Avg (32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.03, costPerUser: 0.80 },
-    { model: 'Llama 4 Scout 17B', pdfs: 30, context: 'Average (16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.40 },
-    { model: 'Llama 4 Scout 17B', pdfs: 30, context: 'Conservative (8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.20 },
-    { model: 'Llama 4 Scout 17B', pdfs: 15, context: 'Aggressive (64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.05, costPerUser: 0.80 },
-    { model: 'Llama 4 Scout 17B', pdfs: 15, context: 'Above Avg (32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.03, costPerUser: 0.40 },
-    { model: 'Llama 4 Scout 17B', pdfs: 15, context: 'Average (16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.20 },
-    { model: 'Llama 4 Scout 17B', pdfs: 15, context: 'Conservative (8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.01, costPerUser: 0.10 },
-    { model: 'Llama 4 Scout 17B', pdfs: 10, context: 'Aggressive (64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.05, costPerUser: 0.53 },
-    { model: 'Llama 4 Scout 17B', pdfs: 10, context: 'Above Avg (32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.03, costPerUser: 0.27 },
-    { model: 'Llama 4 Scout 17B', pdfs: 10, context: 'Average (16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.13 },
-    { model: 'Llama 4 Scout 17B', pdfs: 10, context: 'Conservative (8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.07 },
+    // Llama 4 Scout 110B MoE
+    { model: 'Model E 110B MoE', pdfs: 50, context: 'Aggressive (64k+64k)', inputTokens: 3200000, outputTokens: 3200000, totalTokens: 6400000, costPerPdf: 0.05, costPerUser: 2.66 },
+    { model: 'Model E 110B MoE', pdfs: 50, context: 'Above Avg (32k+32k)', inputTokens: 1600000, outputTokens: 1600000, totalTokens: 3200000, costPerPdf: 0.03, costPerUser: 1.33 },
+    { model: 'Model E 110B MoE', pdfs: 50, context: 'Average (16k+16k)', inputTokens: 800000, outputTokens: 800000, totalTokens: 1600000, costPerPdf: 0.01, costPerUser: 0.66 },
+    { model: 'Model E 110B MoE', pdfs: 50, context: 'Conservative (8k+8k)', inputTokens: 400000, outputTokens: 400000, totalTokens: 800000, costPerPdf: 0.01, costPerUser: 0.33 },
+    { model: 'Model E 110B MoE', pdfs: 30, context: 'Aggressive (64k+64k)', inputTokens: 1920000, outputTokens: 1920000, totalTokens: 3840000, costPerPdf: 0.05, costPerUser: 1.59 },
+    { model: 'Model E 110B MoE', pdfs: 30, context: 'Above Avg (32k+32k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.03, costPerUser: 0.80 },
+    { model: 'Model E 110B MoE', pdfs: 30, context: 'Average (16k+16k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.01, costPerUser: 0.40 },
+    { model: 'Model E 110B MoE', pdfs: 30, context: 'Conservative (8k+8k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.20 },
+    { model: 'Model E 110B MoE', pdfs: 15, context: 'Aggressive (64k+64k)', inputTokens: 960000, outputTokens: 960000, totalTokens: 1920000, costPerPdf: 0.05, costPerUser: 0.80 },
+    { model: 'Model E 110B MoE', pdfs: 15, context: 'Above Avg (32k+32k)', inputTokens: 480000, outputTokens: 480000, totalTokens: 960000, costPerPdf: 0.03, costPerUser: 0.40 },
+    { model: 'Model E 110B MoE', pdfs: 15, context: 'Average (16k+16k)', inputTokens: 240000, outputTokens: 240000, totalTokens: 480000, costPerPdf: 0.01, costPerUser: 0.20 },
+    { model: 'Model E 110B MoE', pdfs: 15, context: 'Conservative (8k+8k)', inputTokens: 120000, outputTokens: 120000, totalTokens: 240000, costPerPdf: 0.01, costPerUser: 0.10 },
+    { model: 'Model E 110B MoE', pdfs: 10, context: 'Aggressive (64k+64k)', inputTokens: 640000, outputTokens: 640000, totalTokens: 1280000, costPerPdf: 0.05, costPerUser: 0.53 },
+    { model: 'Model E 110B MoE', pdfs: 10, context: 'Above Avg (32k+32k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.03, costPerUser: 0.27 },
+    { model: 'Model E 110B MoE', pdfs: 10, context: 'Average (16k+16k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.01, costPerUser: 0.13 },
+    { model: 'Model E 110B MoE', pdfs: 10, context: 'Conservative (8k+8k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.07 },
+    { model: 'Model E 110B MoE', pdfs: 5, context: 'Aggressive (64k+64k)', inputTokens: 320000, outputTokens: 320000, totalTokens: 640000, costPerPdf: 0.05, costPerUser: 0.27 },
+    { model: 'Model E 110B MoE', pdfs: 5, context: 'Above Avg (32k+32k)', inputTokens: 160000, outputTokens: 160000, totalTokens: 320000, costPerPdf: 0.03, costPerUser: 0.14 },
+    { model: 'Model E 110B MoE', pdfs: 5, context: 'Average (16k+16k)', inputTokens: 80000, outputTokens: 80000, totalTokens: 160000, costPerPdf: 0.01, costPerUser: 0.07 },
+    { model: 'Model E 110B MoE', pdfs: 5, context: 'Conservative (8k+8k)', inputTokens: 40000, outputTokens: 40000, totalTokens: 80000, costPerPdf: 0.01, costPerUser: 0.04 },
 ];
 
+
 const MODEL_NAMES = [...new Set(MODELS_DATA.map(d => d.model))];
-const PDF_TIERS = [50, 30, 15, 10];
-const CONTEXT_TIERS = ['Aggressive (64k)', 'Above Avg (32k)', 'Average (16k)', 'Conservative (8k)'];
+const PDF_TIERS = [50, 30, 15, 10, 5];
+const CONTEXT_TIERS = ['Aggressive (64k+64k)', 'Above Avg (32k+32k)', 'Average (16k+16k)', 'Conservative (8k+8k)'];
 
 // ─── DOM Elements ───────────────────────────────────────────
 const els = {
@@ -138,6 +157,7 @@ const els = {
     // Table
     tableBody: document.getElementById('table-body'),
     tableCount: document.getElementById('table-count'),
+    btnDownloadCsv: document.getElementById('btn-download-csv'),
     // Heatmap
     heatmapTable: document.getElementById('heatmap-table'),
     heatmapUserLabel: document.getElementById('heatmap-user-label'),
@@ -148,10 +168,10 @@ const els = {
 
 // ─── State ──────────────────────────────────────────────────
 let state = {
-    users: 5000,
+    users: 100,
     model: 'all',
     pdfs: '15',
-    context: 'Above Avg (32k)',
+    context: 'Above Avg (32k+32k)',
     chartView: 'monthly', // 'monthly' | 'annual'
 };
 
@@ -177,6 +197,40 @@ function populateModelSelect() {
 }
 
 function bindEvents() {
+    if (els.btnDownloadCsv) {
+        els.btnDownloadCsv.addEventListener('click', () => {
+            let csvContent = "Model,PDFs/User,Context Tier,Input Tokens,Output Tokens,Total Tokens,Cost/PDF,Cost/User/Mo,Monthly Total,Annual Total\n";
+
+            MODELS_DATA.forEach(row => {
+                const monthly = calcTotalMonthly(row);
+                const annual = calcAnnual(row);
+
+                const rowArr = [
+                    '"' + row.model + '"',
+                    row.pdfs,
+                    '"' + row.context + '"',
+                    row.inputTokens,
+                    row.outputTokens,
+                    row.totalTokens,
+                    row.costPerPdf.toFixed(4),
+                    row.costPerUser.toFixed(2),
+                    monthly.toFixed(2),
+                    annual.toFixed(2)
+                ];
+                csvContent += rowArr.join(",") + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `molsys_cost_simulation_${state.users}_users.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
     els.userSlider.addEventListener('input', e => {
         state.users = parseInt(e.target.value);
         els.userInput.value = state.users;
@@ -185,7 +239,7 @@ function bindEvents() {
 
     els.userInput.addEventListener('change', e => {
         let v = parseInt(e.target.value);
-        v = Math.max(100, Math.min(50000, v || 100));
+        v = Math.max(100, Math.min(10000000, v || 100));
         state.users = v;
         els.userSlider.value = v;
         els.userInput.value = v;
@@ -208,12 +262,12 @@ function bindEvents() {
     });
 
     els.btnReset.addEventListener('click', () => {
-        state = { users: 5000, model: 'all', pdfs: '15', context: 'Above Avg (32k)', chartView: 'monthly' };
-        els.userSlider.value = 5000;
-        els.userInput.value = 5000;
+        state = { users: 100, model: 'all', pdfs: '15', context: 'Above Avg (32k+32k)', chartView: 'monthly' };
+        els.userSlider.value = 100;
+        els.userInput.value = 100;
         els.modelSelect.value = 'all';
         els.pdfSelect.value = '15';
-        els.contextSelect.value = 'Above Avg (32k)';
+        els.contextSelect.value = 'Above Avg (32k+32k)';
         els.tabMonthly.classList.add('active');
         els.tabAnnual.classList.remove('active');
         updateAll();
@@ -287,10 +341,10 @@ function updateAll() {
 
 // ─── Context Window Helper ──────────────────────────────────
 const CONTEXT_SIZES = {
-    'Aggressive (64k)': { input: '64K', output: '64K', total: '128K' },
-    'Above Avg (32k)':  { input: '32K', output: '32K', total: '64K' },
-    'Average (16k)':    { input: '16K', output: '16K', total: '32K' },
-    'Conservative (8k)':{ input: '8K',  output: '8K',  total: '16K' },
+    'Aggressive (64k+64k)': { input: '64K', output: '64K', total: '128K' },
+    'Above Avg (32k+32k)': { input: '32K', output: '32K', total: '64K' },
+    'Average (16k+16k)': { input: '16K', output: '16K', total: '32K' },
+    'Conservative (8k+8k)': { input: '8K', output: '8K', total: '16K' },
 };
 
 const ICON_CHEAPEST = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
@@ -619,7 +673,7 @@ function updatePerUserChart() {
 function updateScalingChart() {
     const data = getFilteredData();
     const modelNames = [...new Set(data.map(d => d.model))];
-    const userSteps = [100, 500, 1000, 2000, 3000, 5000, 7500, 10000, 15000, 20000, 30000, 50000];
+    const userSteps = [100, 10000, 50000, 100000, 500000, 1000000, 2500000, 5000000, 7500000, 10000000];
 
     // For each model, use the currently filtered scenario(s) — take the average costPerUser
     const datasets = modelNames.map(name => {
